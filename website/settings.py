@@ -27,7 +27,7 @@ SECRET_KEY = 'yhdu%bkacv&(f_xud7lal54qxs8=)(je-pry83^bmfsm+&a7ye'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['immense-hamlet-86873', '127.0.0.1']
 
 
 # Application definition
