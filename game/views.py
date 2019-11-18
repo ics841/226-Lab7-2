@@ -55,7 +55,8 @@ def get_board(request):
 #         return HttpResponse("Player %(id)s is at row %(row)s and col %(col)s" % {'id':player[0].tag, 'row':str(player[0].row), 'col':str(player[0].col)})
 #     else:
         # return HttpResponse("No such player")
-@csrf_exempt@csrf_exempt
+
+
 def get_player_json(request, id):
     player = Player.objects.filter(id=id)
     if (len(player) == 1):
@@ -87,8 +88,11 @@ class PlayerCreate(CreateView):
     fields = '__all__'
     success_url = reverse_lazy('players')
 
-@csrf_exempt
 class PlayerUpdate(UpdateView):
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super(PlayerUpdate, self).dispatch(request, *args, **kwargs)
+
     model = Player
     fields = [ 'row', 'col' ]
     success_url = reverse_lazy('players')
