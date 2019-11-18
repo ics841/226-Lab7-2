@@ -15,8 +15,16 @@ import json
 #    board = Board.objects.filter(tag=0)
 #    return HttpResponse("This board has " + str(board[0].rows) + " rows and " + str(board[0].cols) + " cols.")
    # return HttpResponse("This board has %(rows) rows and %(cols) cols." % {'rows':str(board[0].rows), 'cols':str(board[0].cols)})
-
 def get_board_json(request):
+    boardQuery = Board.objects.filter(tag=0)
+    if (len(boardQuery) == 1):
+        return HttpResponse(json.dumps(boardQuery[0], cls=BoardEncoder))
+    else:
+        return HttpResponse("No such board was found")
+
+
+
+def get_board(request):
     boardQuery = Board.objects.filter(tag=0)
     board = boardQuery[0]
     players = Player.objects.all()
@@ -28,20 +36,6 @@ def get_board_json(request):
         for r in range (len(boardArr[0])):
             s += boardArr[c][r] + ' '
         s += "<br />"
-    template = loader.get_template('game/game_board.html')
-    html = """
-        <!DOCTYPE>
-        <html lang="en">
-        <head>
-        <meta charset="utf-8/>
-        </head>
-            <body>
-            """
-    htmlEnd = """
-            </body>
-            </html>
-            """
-    #return HttpResponse(template.render(s, request))
     return HttpResponse(s)
     #return HttpResponse(json.dumps(boardArr, cls=BoardEncoder))
 
@@ -75,7 +69,11 @@ def get_players(request):
         http += (json.dumps(player, cls=PlayerEncoder)) + "<br />"
     return HttpResponse(http)
 
-
+class BoardEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Board):
+            return { 'id' : obj.id, 'tag' : obj.tag, 'rows' : obj.rows, 'cols' : obj.cols }
+        return json.JSONEncoder.default(self, obj)
 
 class PlayerEncoder(json.JSONEncoder):
     def default(self, obj):
