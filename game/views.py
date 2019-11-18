@@ -27,7 +27,18 @@ def get_board_json(request):
         for r in range (len(boardArr[0])):
             s += boardArr[c][r] + ' '
         s += "<br />"
-    return HttpResponse("<html lang=\"en\">" + s)
+        html_start = """
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        """
+        html_end = """
+    </body>
+</html>
+        """
+    return HttpResponse(html_start + s + html_end)
     #return HttpResponse(json.dumps(boardArr, cls=BoardEncoder))
 
 #class BoardEncoder(json.JSONEncoder):
