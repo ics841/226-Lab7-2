@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from game.models import Player, Board
 from django.urls import reverse_lazy
+from django.template import loader
 from django.views.generic.edit import CreateView, UpdateView
 import json
 
@@ -27,18 +28,21 @@ def get_board_json(request):
         for r in range (len(boardArr[0])):
             s += boardArr[c][r] + ' '
         s += "<br />"
-        html_start = """
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-    </head>
-    <body>
-        """
-        html_end = """
-    </body>
-</html>
-        """
-    return HttpResponse(html_start + s + html_end)
+    template = loader.get_template('game/game_board.html')
+    html = """
+        <!DOCTYPE>
+        <html lang="en">
+        <head>
+        <meta charset="utf-8/>
+        </head>
+            <body>
+            """
+    htmlEnd = """
+            </body>
+            </html>
+            """
+    #return HttpResponse(template.render(s, request))
+    return HttpResponse(s)
     #return HttpResponse(json.dumps(boardArr, cls=BoardEncoder))
 
 #class BoardEncoder(json.JSONEncoder):
