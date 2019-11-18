@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from game.models import Player, Board
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 from django.views.generic.edit import CreateView, UpdateView
 import json
@@ -54,7 +55,7 @@ def get_board(request):
 #         return HttpResponse("Player %(id)s is at row %(row)s and col %(col)s" % {'id':player[0].tag, 'row':str(player[0].row), 'col':str(player[0].col)})
 #     else:
         # return HttpResponse("No such player")
-
+@csrf_exempt@csrf_exempt
 def get_player_json(request, id):
     player = Player.objects.filter(id=id)
     if (len(player) == 1):
@@ -86,6 +87,7 @@ class PlayerCreate(CreateView):
     fields = '__all__'
     success_url = reverse_lazy('players')
 
+@csrf_exempt
 class PlayerUpdate(UpdateView):
     model = Player
     fields = [ 'row', 'col' ]
